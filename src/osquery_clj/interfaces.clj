@@ -1,19 +1,6 @@
 (ns osquery-clj.interfaces)
 
 (gen-interface
-  :name osquery-clj.interfaces.iexample1
-  :methods
-  [[getName [] String]
-   [getLastName [] String]])
-
-(gen-interface
-  :name osquery-clj.interfaces.IWindowsNamedPipe
-  :extends [java.io.Closeable]
-  :methods
-  [[getInputStream [] java.io.InputStream]
-   [getOutputStream [] java.io.OutputStream]])
-
-(gen-interface
   :name osquery-clj.interfaces.IWindowsNamedPipeLibrary
   :extends [com.sun.jna.platform.win32.Kernel32]
   :methods
