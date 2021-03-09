@@ -15,7 +15,10 @@
                  ;; https://mvnrepository.com/artifact/net.java.dev.jna/jna
                  [net.java.dev.jna/jna "4.5.0"]
                  ;; https://mvnrepository.com/artifact/net.java.dev.jna/jna-platform
-                 [net.java.dev.jna/jna-platform "4.5.0"]]
+                 [net.java.dev.jna/jna-platform "4.5.0"]
+                 ;; https://mvnrepository.com/artifact/com.kohlschutter.junixsocket/junixsocket-core
+                 [com.kohlschutter.junixsocket/junixsocket-core "2.3.2"]]
+
   :source-paths      ["src"]
   :java-source-paths ["src/java/gen"]
   :java-cmd "C:\\Program Files\\Java\\jdk-12.0.1\\bin\\java"

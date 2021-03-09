@@ -1,10 +1,13 @@
 (ns osquery-clj.windows-client
-  (:require [osquery-clj.windows-impl :as w])
+  (:require [osquery-clj.windows-impl :as w]
+            [osquery-clj.cmd-utils :as cmd])
   (:import (org.apache.thrift.transport TIOStreamTransport)
            (org.apache.thrift.protocol TBinaryProtocol)
            (osquery.extensions ExtensionManager$Client)))
 
-(defn get-client []
+(def state (atom {}))
+
+(defn get-client! []
   (let [API (w/get-API)
         pipe-handle (w/get-pipe-handle API)
         reader-waitable (w/get-waitable API)
@@ -15,15 +18,24 @@
     (let [transport (TIOStreamTransport. input-stream output-stream)
           protocol (TBinaryProtocol. transport)]
       (.open transport)
-      (let [client (ExtensionManager$Client. protocol)] client))))
+      (let [client (ExtensionManager$Client. protocol)]
+        (reset! state {:transport transport
+                       :API API
+                       :pipe-handle pipe-handle
+                       :rwaitable reader-waitable
+                       :wwritable writer-waitable})
+        client))))
 
-; Transport .close need to be implemented
-; if(this.transport != null) this.transport.close()
-;
-; Close handle ...
-; 	public void close() throws IOException {
-;	    API.CloseHandle(pipeHandle);
-;	    API.CloseHandle(readerWaitable);
-;	    API.CloseHandle(writerWaitable);
-;	}
+(defn query [query]
+  (cmd/spawn-instance)
+  (-> (get-client!)
+      (.query query)
+      (.-response)))
+
+(defn close []
+  (let [{transport :transport API :API ph :pipe-handle rw :rwaitable ww :wwritable} @state]
+    (when-not (nil? transport) (.close transport))
+    (.CloseHandle API ph)
+    (.CloseHandle API rw)
+    (.CloseHandle API ww)))
 

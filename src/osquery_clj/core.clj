@@ -1,19 +1,15 @@
 (ns osquery-clj.core
   (:require [osquery-clj.os-utils :as os]
             [osquery-clj.cmd-utils :as cmd]
-            [osquery-clj.windows-client :as windows]))
+            [osquery-clj.windows-client :as windows]
+            [osquery-clj.unix-client :as unix]))
 
-(defn execute-windows-query []
-  (cmd/spawn-instance)
-  (-> (windows/get-client)
-      (.query "select name from processes;")
-      (.-response)
-      (println)))
-
-(defn execute-linux-query []
-  (println "Need to be done..."))
-
-(defn main []
+(defn query [query]
   (if (os/is-windows?)
-    (execute-windows-query)
-    (execute-linux-query)))
+    (windows/query query)
+    (unix/query query)))
+
+(defn close []
+  (if (os/is-windows?)
+    (windows/close)
+    (unix/close)))

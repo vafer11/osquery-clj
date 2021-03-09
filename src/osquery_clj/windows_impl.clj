@@ -37,12 +37,13 @@
         (let [imm (.ReadFile API pipe-handle read-buffer len nil (.getPointer olap))
               read (IntByReference.)]
           (when-not imm
-            (when-not (= (.GetLastError API ) WinError/ERROR_IO_PENDING)
+            (when-not (= (.GetLastError API) WinError/ERROR_IO_PENDING)
               (throw (IOException. "ReadFile failed..."))))
           (when-not (.GetOverlappedResult API pipe-handle (.getPointer olap) read true)
             (throw (IOException. "GetOverlappedResult() failed for read operation...")))
           (when-not (= (.getValue read) len)
             (throw (IOException. "ReadFile() read less bytes than requested...")))
+
           (let [byte-array (.getByteArray read-buffer 0 len)]
             (System/arraycopy byte-array 0 b off len)
             len))))))
