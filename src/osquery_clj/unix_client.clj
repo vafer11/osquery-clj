@@ -17,8 +17,8 @@
     (ExtensionManager$Client. protocol)))
 
 (defn query [query]
-  (let [client (get-client!)
-        res (.query client query)]
-    res))
+  (-> (get-client!)
+      (.query query)
+      (.-response)))
 
 (defn close [] (.close (:transport @state)))
