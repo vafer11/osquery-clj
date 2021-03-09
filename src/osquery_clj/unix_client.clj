@@ -17,7 +17,7 @@
     (ExtensionManager$Client. protocol)))
 
 (defn query [query]
-  (let [client get-client!
+  (let [client (get-client!)
         res (.query client query)]
     res))
 
