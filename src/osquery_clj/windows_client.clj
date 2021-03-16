@@ -26,11 +26,15 @@
                        :wwritable writer-waitable})
         client))))
 
+; If an exception is thrown, will retry until 5 times.
 (defn query [query]
   (cmd/spawn-instance)
-  (-> (get-client!)
-      (.query query)
-      (.-response)))
+  (let [client (get-client!)]
+    (loop [n 5]
+      (if-let [result (try (when (> n 0) (-> (.query client query) (.-response) (vec)))
+                           (catch Exception e nil))]
+        result
+        (recur (dec n))))))
 
 (defn close []
   (let [{transport :transport API :API ph :pipe-handle rw :rwaitable ww :wwritable} @state]
