@@ -1,4 +1,4 @@
-(defproject vafer/osquery-clj "0.1.9-alpha"
+(defproject vafer/osquery-clj "0.2.1-alpha"
   :description "A super tiny library to integrate osquery tool to your code."
   :url "https://github.com/vafer11/osquery-clj"
   :license {:name "EPL-2.0"

@@ -8,8 +8,3 @@
   (if (os/is-windows?)
     (windows/query query)
     (unix/query query)))
-
-(defn close []
-  (if (os/is-windows?)
-    (windows/close)
-    (unix/close)))
